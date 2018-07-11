@@ -3,9 +3,6 @@ package ilyaPn.firstBootProject.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-/**
- * Created by ilyaP on 08.07.2018.
- */
 @Entity
 public class Emailing {
     @Id

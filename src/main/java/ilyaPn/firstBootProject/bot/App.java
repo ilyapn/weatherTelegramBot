@@ -19,7 +19,7 @@ public class App {
         try {
             ApiContextInitializer.init();
             TelegramBotsApi botsApi = new TelegramBotsApi();
-            Bot bot = new Bot(BOT_TOKEN, BOT_NAME,repository);
+            Bot bot = new Bot(BOT_TOKEN, BOT_NAME,new BotAnswers(repository));
             botsApi.registerBot(bot);
         } catch (TelegramApiException e) {
             e.printStackTrace();
