@@ -1,4 +1,4 @@
-package ilyaPn.weatherTelegramBot.Repository;
+package ilyaPn.weatherTelegramBot.repository;
 
 import ilyaPn.weatherTelegramBot.model.Emailing;
 import org.springframework.data.repository.CrudRepository;

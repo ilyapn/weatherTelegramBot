@@ -1,6 +1,6 @@
 package ilyaPn.weatherTelegramBot.bot;
 
-import ilyaPn.weatherTelegramBot.Repository.EmailingRepository;
+import ilyaPn.weatherTelegramBot.repository.EmailingRepository;
 import ilyaPn.weatherTelegramBot.common.City;
 import ilyaPn.weatherTelegramBot.common.Weather;
 import ilyaPn.weatherTelegramBot.model.Emailing;

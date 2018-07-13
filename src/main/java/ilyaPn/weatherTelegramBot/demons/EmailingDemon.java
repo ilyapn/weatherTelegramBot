@@ -1,7 +1,7 @@
 package ilyaPn.weatherTelegramBot.demons;
 
 
-import ilyaPn.weatherTelegramBot.Repository.EmailingRepository;
+import ilyaPn.weatherTelegramBot.repository.EmailingRepository;
 import ilyaPn.weatherTelegramBot.bot.Bot;
 import ilyaPn.weatherTelegramBot.bot.BotAnswers;
 import ilyaPn.weatherTelegramBot.model.Emailing;
