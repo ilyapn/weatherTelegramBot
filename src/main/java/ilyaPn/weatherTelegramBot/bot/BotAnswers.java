@@ -88,6 +88,14 @@ public class BotAnswers {
                 "название города на английском\n" +
                 "/время частота_обновления_кол-во_часов \n" +
                 "по умолчанию время обновления 1 час\n" +
-                "/сейчас что бы узнать погоду";
+                "/сейчас что бы узнать погоду \n" +
+                "/отписаться что бы отписаться от уведомлений";
+    }
+
+    public String unsubscribeAnswer(MessageContext ctx) {
+        if (repository.findFirstByChatId(ctx.chatId()) == null)
+            return "ты не имеешь подписки";
+        repository.deleteById(ctx.chatId());
+        return "ты больше не будешь получать уведомления";
     }
 }

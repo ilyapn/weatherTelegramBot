@@ -69,5 +69,14 @@ public class Bot extends AbilityBot {
                 .build();
     }
 
+    public Ability unsubscribe(){
+        return Ability.builder()
+                .name("отписаться")
+                .locality(ALL)
+                .privacy(PUBLIC)
+                .action(ctx -> silent.send(botAnswers.unsubscribeAnswer(ctx),ctx.chatId()))
+                .build();
+    }
+
 }
 
