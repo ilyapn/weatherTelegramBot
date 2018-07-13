@@ -1,24 +1,28 @@
-package ilyaPn.firstBootProject.bot;
+package ilyaPn.weatherTelegramBot.bot;
 
-import ilyaPn.firstBootProject.Repository.EmailingRepository;
-import ilyaPn.firstBootProject.common.City;
-import ilyaPn.firstBootProject.common.Weather;
-import ilyaPn.firstBootProject.model.Emailing;
+import ilyaPn.weatherTelegramBot.Repository.EmailingRepository;
+import ilyaPn.weatherTelegramBot.common.City;
+import ilyaPn.weatherTelegramBot.common.Weather;
+import ilyaPn.weatherTelegramBot.model.Emailing;
 import net.aksingh.owmjapis.api.APIException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.objects.MessageContext;
 
 import java.io.FileNotFoundException;
 import java.util.Calendar;
 import java.util.Date;
 
+@Component
 public class BotAnswers {
+    private EmailingRepository repository;
+    private Weather weather;
 
-    public BotAnswers(EmailingRepository repository) {
+    @Autowired
+    public BotAnswers(EmailingRepository repository, Weather weather) {
         this.repository = repository;
+        this.weather = weather;
     }
-
-    public EmailingRepository repository;
-
 
 
     public void addEmailing(long chatId, long cityId, int updateFrequency) {
@@ -35,26 +39,35 @@ public class BotAnswers {
 
     public String getWeatherAnswer(long chatId) {
         try {
-            return Weather.getCelsiusTemperature(repository.findFirstByChatId(chatId).getCityId())
+            return weather.getCelsiusTemperature(repository.findFirstByChatId(chatId).getCityId())
                     + " по цельсию";
         } catch (APIException e) {
             return "что то пошло не так c API";
         }
     }
 
-    public void setTime(MessageContext context) {
+    private void setTime(MessageContext context) throws Exception {
         Emailing emailing = repository.findFirstByChatId(context.chatId());
-        addEmailing(emailing.getChatId(), emailing.getCityId(), Integer.parseInt(context.firstArg()));
+        int hours = Integer.parseInt(context.firstArg());
+        if (hours <= 0)
+            throw new Exception("invalid hours");
+        addEmailing(emailing.getChatId(), emailing.getCityId(), hours);
     }
 
     public String setTimeAnswer(MessageContext context) {
-        if (repository.findFirstByChatId(context.chatId()) == null)
-            return "ты не добавил город";
-        setTime(context);
+        if (context.arguments().length == 0)
+            return "ты не добавил кол-во часов";
+        try {
+            setTime(context);
+        } catch (Exception e) {
+            return "что то пошло не так";
+        }
         return "теперь ты будешь получать сообщение о погоде раз в " + context.firstArg() + " час";
     }
 
     public String cityAddAnswer(MessageContext context){
+        if(context.arguments().length == 0)
+            return "ты не ввел город";
         if (City.hasCity(context.firstArg())) {
             try {
                 addEmailing(context.chatId(), City.getCityId(context.firstArg()).get(0), 1);
@@ -65,9 +78,11 @@ public class BotAnswers {
         }
         return "я не нашел токого города =(";
     }
+
     public String startAnswer(){
         return "Для того что бы пользоваться ботом посмотри команды с помощью /help";
     }
+
     public String helpAnswer(){
         return "/город название_города \n" +
                 "название города на английском\n" +

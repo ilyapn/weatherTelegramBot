@@ -1,4 +1,4 @@
-package ilyaPn.firstBootProject.model;
+package ilyaPn.weatherTelegramBot.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

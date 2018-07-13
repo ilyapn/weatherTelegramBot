@@ -1,18 +1,26 @@
-package ilyaPn.firstBootProject.bot;
+package ilyaPn.weatherTelegramBot.bot;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
 
 import static org.telegram.abilitybots.api.objects.Locality.ALL;
 import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
+@Component
 public class Bot extends AbilityBot {
-    BotAnswers botAnswers ;
+    private BotAnswers botAnswers ;
 
-    Bot(String botToken, String botUsername,BotAnswers botAnswers) {
+    @Autowired
+    Bot(@Value("${BOT_TOKEN}")String botToken,
+        @Value("${BOT_NAME}")String botUsername,
+        BotAnswers botAnswers) {
         super(botToken, botUsername);
         this.botAnswers = botAnswers;
     }
+
 
     public int creatorId() {
         return 0;
@@ -40,7 +48,6 @@ public class Bot extends AbilityBot {
                 .locality(ALL)
                 .privacy(PUBLIC)
                 .action(ctx -> {silent.send(botAnswers.cityAddAnswer(ctx), ctx.chatId());
-
                 })
                 .build();
     }

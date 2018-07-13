@@ -1,28 +1,35 @@
-package ilyaPn.firstBootProject.bot;
+package ilyaPn.weatherTelegramBot.runners;
 
-import ilyaPn.firstBootProject.Repository.EmailingRepository;
+import ilyaPn.weatherTelegramBot.bot.Bot;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
-@Component
-public class App {
-    EmailingRepository repository;
-    private static String BOT_NAME = "ForYotaBot";
-    private static String BOT_TOKEN = "610785523:AAEbKHdzRpskMBF1Mtqvg_bMPJX_5DWOmpo";
 
-    public App(EmailingRepository repository) {
-        this.repository = repository;
+
+@Component
+public class BotRunner implements CommandLineRunner {
+    private Bot bot;
+
+    @Autowired
+    public BotRunner(Bot bot) {
+        this.bot = bot;
     }
 
-    public void app() {
+    private void app() {
         try {
             ApiContextInitializer.init();
             TelegramBotsApi botsApi = new TelegramBotsApi();
-            Bot bot = new Bot(BOT_TOKEN, BOT_NAME,new BotAnswers(repository));
             botsApi.registerBot(bot);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        app();
     }
 }
